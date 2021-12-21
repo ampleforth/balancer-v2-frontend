@@ -36,7 +36,7 @@ type Props = {
   noPoolsLabel?: string;
   isPaginated?: boolean;
   selectedTokens?: string[];
-  showTokenMigrationColumn?: boolean;
+  showMigrationColumn?: boolean;
 };
 
 /**
@@ -46,7 +46,7 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
   isLoadingMore: false,
   showPoolShares: false,
-  showTokenMigrationColumn: false,
+  showMigrationColumn: false,
   noPoolsLabel: 'No pools',
   isPaginated: false
 });
@@ -139,7 +139,7 @@ const columns = ref<ColumnDefinition<DecoratedPoolWithShares>[]>([
     align: 'right',
     id: 'migrate',
     width: 150,
-    hidden: !props.showTokenMigrationColumn
+    hidden: !props.showMigrationColumn
   }
 ]);
 
@@ -168,6 +168,14 @@ function handleRowClick(pool: DecoratedPoolWithShares) {
 
 function isMigratablePool(pool: DecoratedPoolWithShares) {
   return isStaBAL3(pool);
+}
+
+function navigateToPoolMigration(pool: DecoratedPoolWithShares) {
+  router.push({
+    name: 'migrate-pool',
+    params: { id: pool.id },
+    query: { returnRoute: 'home' }
+  });
 }
 </script>
 
@@ -249,7 +257,12 @@ function isMigratablePool(pool: DecoratedPoolWithShares) {
       </template>
       <template v-slot:migrateCell="pool">
         <div class="px-6 py-4 flex justify-end">
-          <BalBtn v-if="isMigratablePool(pool)" color="gradient" size="sm">
+          <BalBtn
+            v-if="isMigratablePool(pool)"
+            color="gradient"
+            size="sm"
+            @click.prevent="navigateToPoolMigration(pool)"
+          >
             {{ t('migrate') }}
           </BalBtn>
         </div>

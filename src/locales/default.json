@@ -146,6 +146,20 @@
         "recoveredState": "We've recovered your previous choices",
         "recoveredStateInfo": "You last left off before finishing creating this pool. We've restored all your choices from before. Want to start over?"
     },
+    "migratePool": {
+        "aaveBoostedPool": {
+            "whyUpgrade": {
+                "title": "Why upgrade?",
+                "description": "Boosted pools also earn additional yield from holding interest-bearing aTokens. aTokens accrue interest in real time when underlying assets are loaned out to borrowers on Aave."                
+            },
+            "upgradeToPool": {
+                "title": "Upgrade to a boosted pool"
+            },
+            "poolStats": {
+                "title": "Boosted pool stats"
+            }
+        }
+    },
     "creating": "Creating",
     "createPool": "Create pool",
     "createPoolTooltip": "Create {0} pool",
@@ -410,6 +424,7 @@
     "previewTradeTransactions": "Preview trade transactions",
     "previewUnwrap": "Preview {0} Unwrap",
     "previewWrap": "Preview {0} Wrap",
+    "previewUpgrade": "Preview upgrade",
     "priceImpact": "Price impact",
     "priceImpactAccept": "I accept the high price impact from {0} single token amounts, moving the market price based on the depth of the market.",
     "priceImpactCheckbox": "Price impact acknowledgement",
@@ -686,6 +701,7 @@
     "yieldEarnings": "Yield earnings",
     "youDidIt": "You did it!",
     "yourTransactions": "Your transactions in this pool",
+    "yourBalanceInPool": "Your balance in this pool",
     "trendingPairs": "Trending pairs",
     "chooseAPair": "Please select a valid pair",
     "youCanInvest": "You can invest"

@@ -70,10 +70,7 @@ export function isWstETH(pool: AnyPool): boolean {
 
 export function isStaBAL3(pool: AnyPool): boolean {
   if (isMainnet) {
-    return (
-      pool.id ===
-      '0x06df3b2bbb68adc8b0e302443692037ed9f91b42000000000000000000000063'
-    );
+    return pool.id === configService.network.pools.staBAL3;
   }
 
   return false;

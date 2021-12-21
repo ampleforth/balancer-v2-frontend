@@ -14,7 +14,7 @@
         :data="userPools"
         :noPoolsLabel="$t('noInvestments')"
         showPoolShares
-        showTokenMigrationColumn
+        showMigrationColumn
         :selectedTokens="selectedTokens"
         class="mb-8"
       />
