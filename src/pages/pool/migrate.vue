@@ -4,13 +4,13 @@ import { useI18n } from 'vue-i18n';
 
 import { configService } from '@/services/config/config.service';
 
-import useBreakpoints from '@/composables/useBreakpoints';
 import usePoolQuery from '@/composables/queries/usePoolQuery';
 import useNumbers from '@/composables/useNumbers';
 
 import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
 import useUserSettings from '@/composables/useUserSettings';
+import useTokens from '@/composables/useTokens';
 
 /**
  * DATA
@@ -29,9 +29,9 @@ const currentMigration = migrationsMap.aaveBoostedPool;
  * COMPOSABLES
  */
 const { t } = useI18n();
-const { upToLargeBreakpoint } = useBreakpoints();
 const { fNum } = useNumbers();
 const { currency } = useUserSettings();
+const { tokens } = useTokens();
 
 const migrateFromPoolQuery = usePoolQuery(currentMigration.from);
 const migrateToPoolQuery = usePoolQuery(currentMigration.to);
@@ -62,8 +62,8 @@ const migrateToPool = computed(() => migrateToPoolQuery.data.value);
 </script>
 
 <template>
-  <Col3Layout offsetGutters mobileHideGutters>
-    <template #gutterLeft v-if="!upToLargeBreakpoint">
+  <Col3Layout offsetGutters>
+    <template #gutterLeft>
       <BalCard shadow="none">
         <div class="mb-4">
           {{ t(`migratePool.${currentMigration.id}.whyUpgrade.title`) }}
@@ -82,7 +82,33 @@ const migrateToPool = computed(() => migrateToPoolQuery.data.value);
       <h4 class="mb-4">
         {{ t(`migratePool.${currentMigration.id}.upgradeToPool.title`) }}
       </h4>
-      <div class="text-gray-500">{{ t('yourBalanceInPool') }}</div>
+      <div class="mb-6">
+        <div class="text-gray-500">{{ t('yourBalanceInPool') }}</div>
+      </div>
+      <div class="rounded border p-3  flex items-center">
+        <BalAsset :address="migrateFromPool.address" class="mr-2" :size="36" />
+        <div>
+          <div>{{ tokens[migrateFromPool.address].symbol }}</div>
+          <div class="text-gray-500">
+            {{ tokens[migrateFromPool.address].name }}
+          </div>
+        </div>
+      </div>
+      <div class="block flex justify-center my-5">
+        <ArrowDownIcon />
+      </div>
+      <div class="rounded border p-3 mb-6 flex items-center">
+        <BalAsset :address="migrateToPool.address" class="mr-2" :size="36" />
+        <div>
+          <div>{{ tokens[migrateToPool.address].symbol }}</div>
+          <div class="text-gray-500">
+            {{ tokens[migrateToPool.address].name }}
+          </div>
+        </div>
+      </div>
+      <BalBtn color="gradient" block>
+        {{ t('previewUpgrade') }}
+      </BalBtn>
     </BalCard>
 
     <template #gutterRight>
