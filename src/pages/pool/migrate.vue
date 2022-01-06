@@ -16,6 +16,7 @@ import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
 import TradeSettingsPopover, {
   TradeSettingsContext
 } from '@/components/popovers/TradeSettingsPopover.vue';
+import UpgradePreviewModal from '@/components/forms/pool_actions/UpgradeForm/components/UpgradePreviewModal/UpgradePreviewModal.vue';
 
 import { bnum } from '@/lib/utils';
 
@@ -41,6 +42,7 @@ const { currency } = useUserSettings();
 const { tokens, balanceFor, balances } = useTokens();
 const fromPoolTokenExpanded = ref(false);
 const toPoolTokenExpanded = ref(false);
+const showPreview = ref(false);
 
 const migrateFromPoolQuery = usePoolQuery(currentMigration.from);
 const migrateToPoolQuery = usePoolQuery(currentMigration.to);
@@ -152,7 +154,7 @@ const migrateToPoolTokenInfo = computed(() =>
         <div class="text-gray-500">{{ t('yourBalanceInPool') }}</div>
         <div class="font-semibold">{{ fromPoolFiatTotal }}</div>
       </div>
-      <div class="rounded border p-3 mb-6">
+      <div class="rounded border dark:border-gray-900 p-3 mb-6">
         <BalBreakdown
           :items="migrateFromPool.tokenAddresses"
           class="w-full cursor-pointer select-none"
@@ -188,7 +190,7 @@ const migrateToPoolTokenInfo = computed(() =>
       <div class="block flex justify-center my-5">
         <ArrowDownIcon />
       </div>
-      <div class="rounded border p-3 mb-6">
+      <div class="rounded border dark:border-gray-900 p-3 mb-6">
         <BalBreakdown
           :items="migrateToPool.tokenAddresses"
           class="w-full cursor-pointer select-none"
@@ -221,7 +223,7 @@ const migrateToPoolTokenInfo = computed(() =>
           </template>
         </BalBreakdown>
       </div>
-      <BalBtn color="gradient" block>
+      <BalBtn color="gradient" block @click="showPreview = true">
         {{ t('previewUpgrade') }}
       </BalBtn>
     </BalCard>
@@ -262,4 +264,12 @@ const migrateToPoolTokenInfo = computed(() =>
       </BalCard>
     </template>
   </Col3Layout>
+  <teleport to="#modal">
+    <UpgradePreviewModal
+      v-if="showPreview"
+      :migrateFromPool="migrateFromPool"
+      :migrateToPool="migrateToPool"
+      @close="showPreview = false"
+    />
+  </teleport>
 </template>
