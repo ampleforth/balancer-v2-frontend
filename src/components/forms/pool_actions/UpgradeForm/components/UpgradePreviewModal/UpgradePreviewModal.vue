@@ -1,23 +1,26 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-// Types
+// import { useI18n } from 'vue-i18n';
+
 import { FullPool } from '@/services/balancer/subgraph/types';
-// Composables
-import { useI18n } from 'vue-i18n';
-// Components
+
+import Risks from './components/Risks.vue';
+
+import { PoolMigration } from '../../types';
 
 /**
  * TYPES
  */
 type Props = {
-  migrateFromPool: FullPool;
-  migrateToPool: FullPool;
+  poolMigration: PoolMigration;
+  fromPool: FullPool;
+  toPool: FullPool;
 };
 
 /**
  * PROPS & EMITS
  */
-const props = withDefaults(defineProps<Props>(), {});
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -31,13 +34,13 @@ const upgradeConfirmed = ref(false);
 /**
  * COMPOSABLES
  */
-const { t } = useI18n();
+// const { t } = useI18n();
 
 /**
  * COMPUTED
  */
-const title = computed((): string =>
-  upgradeConfirmed.value ? 'Preview upgrade' : 'Upgrade confirmed'
+const title = computed(() =>
+  upgradeConfirmed.value ? 'Preview confirmed' : 'Upgrade preview'
 );
 
 /**
@@ -67,6 +70,9 @@ function handleClose(): void {
       </div>
     </template>
 
-    <div>Hello world</div>
+    <Risks
+      v-if="props.poolMigration.riskI18nLabels != null"
+      :poolMigration="props.poolMigration"
+    />
   </BalModal>
 </template>

@@ -39,7 +39,7 @@ const emit = defineEmits<{
 /**
  * STATE
  */
-const withdrawalConfirmed = ref(false);
+const withdrawalConfirmed = ref(true);
 
 /**
  * COMPOSABLES
