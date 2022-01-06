@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { configService } from '@/services/config/config.service';
+import PoolCalculator from '@/services/pool/calculator/calculator.sevice';
+import { FullPool } from '@/services/balancer/subgraph/types';
 
 import usePoolQuery from '@/composables/queries/usePoolQuery';
 import useNumbers from '@/composables/useNumbers';
+import useUserSettings from '@/composables/useUserSettings';
+import useTokens from '@/composables/useTokens';
 
 import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
@@ -13,8 +17,7 @@ import TradeSettingsPopover, {
   TradeSettingsContext
 } from '@/components/popovers/TradeSettingsPopover.vue';
 
-import useUserSettings from '@/composables/useUserSettings';
-import useTokens from '@/composables/useTokens';
+import { bnum } from '@/lib/utils';
 
 /**
  * DATA
@@ -33,9 +36,9 @@ const currentMigration = migrationsMap.aaveBoostedPool;
  * COMPOSABLES
  */
 const { t } = useI18n();
-const { fNum } = useNumbers();
+const { fNum, toFiat } = useNumbers();
 const { currency } = useUserSettings();
-const { tokens } = useTokens();
+const { tokens, balanceFor, balances } = useTokens();
 const fromPoolTokenExpanded = ref(false);
 const toPoolTokenExpanded = ref(false);
 
@@ -58,9 +61,42 @@ const isLoadingPools = computed(
   () => migrateToPoolLoading.value || migrateFromPoolLoading.value
 );
 
-const migrateFromPool = computed(() => migrateFromPoolQuery.data.value);
+const migrateFromPool = computed<FullPool | undefined>(
+  () => migrateFromPoolQuery.data.value
+);
 
-const migrateToPool = computed(() => migrateToPoolQuery.data.value);
+const migrateToPool = computed<FullPool | undefined>(
+  () => migrateToPoolQuery.data.value
+);
+
+const fromPoolFiatTotal = computed(() => {
+  if (migrateFromPoolLoading.value || migrateFromPool.value == null) {
+    return '-';
+  }
+
+  const poolCalculator = new PoolCalculator(
+    migrateFromPool as Ref<FullPool>,
+    tokens,
+    balances,
+    'exit',
+    ref(false)
+  );
+
+  const { receive } = poolCalculator.propAmountsGiven(
+    balanceFor(migrateFromPool.value.address),
+    0,
+    'send'
+  );
+
+  const fiatValue = migrateFromPool.value.tokenAddresses
+    .map((address, i) => toFiat(receive[i], address))
+    .reduce((total, value) =>
+      bnum(total)
+        .plus(value)
+        .toString()
+    );
+  return fNum(fiatValue, currency.value);
+});
 
 const migrateFromPoolTokenInfo = computed(() =>
   migrateFromPool.value != null
@@ -114,6 +150,7 @@ const migrateToPoolTokenInfo = computed(() =>
       </template>
       <div class="mb-6">
         <div class="text-gray-500">{{ t('yourBalanceInPool') }}</div>
+        <div class="font-semibold">{{ fromPoolFiatTotal }}</div>
       </div>
       <div class="rounded border p-3 mb-6">
         <BalBreakdown
@@ -202,17 +239,21 @@ const migrateToPoolTokenInfo = computed(() =>
             <div class="text-gray-500 dark:text-gray-400">
               {{ t('poolValue') }}
             </div>
-            <div>{{ fNum(migrateToPool.totalLiquidity, currency) }}</div>
+            <div class="font-semibold">
+              {{ fNum(migrateToPool.totalLiquidity, currency) }}
+            </div>
           </div>
           <div class="mb-3">
             <div class="text-gray-500 dark:text-gray-400">
               {{ t('volumeTime', ['24h']) }}
             </div>
-            <div>{{ fNum(migrateToPool.dynamic.volume, currency) }}</div>
+            <div class="font-semibold">
+              {{ fNum(migrateToPool.dynamic.volume, currency) }}
+            </div>
           </div>
           <div>
             <div class="text-gray-500 dark:text-gray-400">{{ t('apr') }}</div>
-            <div class="flex items-center">
+            <div class="flex items-center font-semibold">
               {{ fNum(migrateToPool.dynamic.apr.total, 'percent') }}
               <LiquidityAPRTooltip :pool="migrateToPool" />
             </div>
