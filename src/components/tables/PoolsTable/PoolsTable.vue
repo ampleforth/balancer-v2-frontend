@@ -17,7 +17,7 @@ import useBreakpoints from '@/composables/useBreakpoints';
 import {
   isStableLike,
   isStablePhantom,
-  isStaBAL3
+  isMigratablePool
 } from '@/composables/usePool';
 
 import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
@@ -164,10 +164,6 @@ function orderedPoolTokens(pool: DecoratedPoolWithShares): PoolToken[] {
 function handleRowClick(pool: DecoratedPoolWithShares) {
   trackGoal(Goals.ClickPoolsTableRow);
   router.push({ name: 'pool', params: { id: pool.id } });
-}
-
-function isMigratablePool(pool: DecoratedPoolWithShares) {
-  return isStaBAL3(pool);
 }
 
 function navigateToPoolMigration(pool: DecoratedPoolWithShares) {

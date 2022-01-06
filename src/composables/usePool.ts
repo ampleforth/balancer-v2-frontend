@@ -75,6 +75,11 @@ export function isStaBAL3(pool: AnyPool): boolean {
 
   return false;
 }
+
+export function isMigratablePool(pool: AnyPool) {
+  return isStaBAL3(pool);
+}
+
 export function noInitLiquidity(pool: AnyPool): boolean {
   return bnum(pool?.onchain?.totalSupply || '0').eq(0);
 }
@@ -184,6 +189,7 @@ export function usePool(pool: Ref<AnyPool> | Ref<undefined>) {
     isTradingHaltable,
     isWeth,
     noInitLiquidity,
-    lpTokensFor
+    lpTokensFor,
+    isMigratablePool
   };
 }

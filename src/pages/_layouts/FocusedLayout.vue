@@ -1,16 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const returnRoute = ref<string>(route.query?.returnRoute as string);
+function getReturnRoute() {
+  const queryReturnRoute = route.query?.returnRoute as string;
+
+  if (queryReturnRoute) {
+    const queryReturnParams = route.query?.returnParams as string;
+
+    if (queryReturnParams) {
+      return { name: queryReturnRoute, params: JSON.parse(queryReturnParams) };
+    }
+
+    return { name: queryReturnRoute };
+  }
+
+  return { name: 'home' };
+}
 </script>
 <template>
   <div class="pb-16">
     <div class="layout-header mb-12">
       <div></div>
-      <router-link :to="returnRoute ? { name: returnRoute } : { name: 'home' }">
+      <router-link :to="getReturnRoute()">
         <BalIcon name="x" size="lg" />
       </router-link>
     </div>

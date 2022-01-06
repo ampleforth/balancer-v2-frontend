@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { toRef, computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { FullPool } from '@/services/balancer/subgraph/types';
+import useWeb3 from '@/services/web3/useWeb3';
+import PoolCalculator from '@/services/pool/calculator/calculator.sevice';
+
 import useTokens from '@/composables/useTokens';
 import useNumbers from '@/composables/useNumbers';
 import useUserSettings from '@/composables/useUserSettings';
-import useWeb3 from '@/services/web3/useWeb3';
 import { usePool } from '@/composables/usePool';
-import PoolCalculator from '@/services/pool/calculator/calculator.sevice';
+
 import { bnum } from '@/lib/utils';
 
 /**
@@ -29,7 +33,10 @@ const { tokens, balances, balanceFor, getTokens } = useTokens();
 const { fNum, toFiat } = useNumbers();
 const { currency } = useUserSettings();
 const { isWalletReady } = useWeb3();
-const { isStableLikePool, isStablePhantomPool } = usePool(toRef(props, 'pool'));
+const { isStableLikePool, isStablePhantomPool, isMigratablePool } = usePool(
+  toRef(props, 'pool')
+);
+const router = useRouter();
 
 /**
  * SERVICES
@@ -106,6 +113,17 @@ function fiatLabelFor(index: number, address: string): string {
   const fiatValue = toFiat(propTokenAmounts.value[index], address);
   return fNum(fiatValue, currency.value);
 }
+
+function navigateToPoolMigration(pool: FullPool) {
+  router.push({
+    name: 'migrate-pool',
+    params: { id: pool.id },
+    query: {
+      returnRoute: 'pool',
+      returnParams: JSON.stringify({ id: pool.id })
+    }
+  });
+}
 </script>
 
 <template>
@@ -152,6 +170,15 @@ function fiatLabelFor(index: number, address: string): string {
           </span>
         </span>
       </div>
+      <BalBtn
+        v-if="isMigratablePool(props.pool)"
+        color="blue"
+        class="mt-4"
+        block
+        @click.prevent="navigateToPoolMigration(props.pool)"
+      >
+        {{ $t('migratePool.migrateToBoostedPool') }}
+      </BalBtn>
     </div>
   </BalCard>
 </template>

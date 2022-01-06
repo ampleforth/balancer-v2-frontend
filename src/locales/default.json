@@ -158,7 +158,8 @@
             "poolStats": {
                 "title": "Boosted pool stats"
             }
-        }
+        },
+        "migrateToBoostedPool": "Migrate to a boosted pool"
     },
     "creating": "Creating",
     "createPool": "Create pool",
