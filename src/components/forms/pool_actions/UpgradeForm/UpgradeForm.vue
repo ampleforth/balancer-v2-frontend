@@ -12,13 +12,13 @@ import useUserSettings from '@/composables/useUserSettings';
 import useTokens from '@/composables/useTokens';
 
 import Col3Layout from '@/components/layouts/Col3Layout.vue';
-import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
 import TradeSettingsPopover, {
   TradeSettingsContext
 } from '@/components/popovers/TradeSettingsPopover.vue';
 
 import UpgradePreviewModal from './components/UpgradePreviewModal/UpgradePreviewModal.vue';
 import UpgradeExplainer from './components/UpgradeExplainer.vue';
+import PoolStats from './components/PoolStats.vue';
 
 import { PoolMigrationInfo } from './types';
 
@@ -223,40 +223,11 @@ const migrateToPoolTokenInfo = computed(() =>
 
     <template #gutterRight>
       <BalLoadingBlock v-if="migrateToPoolLoading" class="h-64" />
-      <BalCard v-else noPad shadow="none">
-        <div class="p-4 w-full border-b dark:border-gray-900">
-          <h6>
-            {{
-              t(`migratePool.${props.poolMigrationInfo.type}.poolStats.title`)
-            }}
-          </h6>
-        </div>
-        <div class="-mt-2 p-4">
-          <div class="mb-3">
-            <div class="text-gray-500 dark:text-gray-400">
-              {{ $t('poolValue') }}
-            </div>
-            <div class="font-semibold">
-              {{ fNum(migrateToPool.totalLiquidity, currency) }}
-            </div>
-          </div>
-          <div class="mb-3">
-            <div class="text-gray-500 dark:text-gray-400">
-              {{ $t('volumeTime', ['24h']) }}
-            </div>
-            <div class="font-semibold">
-              {{ fNum(migrateToPool.dynamic.volume, currency) }}
-            </div>
-          </div>
-          <div>
-            <div class="text-gray-500 dark:text-gray-400">{{ $t('apr') }}</div>
-            <div class="flex items-center font-semibold">
-              {{ fNum(migrateToPool.dynamic.apr.total, 'percent') }}
-              <LiquidityAPRTooltip :pool="migrateToPool" />
-            </div>
-          </div>
-        </div>
-      </BalCard>
+      <PoolStats
+        v-else
+        :pool="migrateToPool"
+        :poolMigrationInfo="props.poolMigrationInfo"
+      />
     </template>
   </Col3Layout>
   <teleport to="#modal">

@@ -1,0 +1,60 @@
+<script setup lang="ts">
+import useNumbers from '@/composables/useNumbers';
+import useUserSettings from '@/composables/useUserSettings';
+
+import { FullPool } from '@/services/balancer/subgraph/types';
+
+import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
+import { PoolMigrationInfo } from '@/components/forms/pool_actions/UpgradeForm/types';
+
+type Props = {
+  poolMigrationInfo: PoolMigrationInfo;
+  pool: FullPool;
+};
+
+/**
+ * PROPS
+ */
+const props = defineProps<Props>();
+
+/**
+ * COMPOSABLES
+ */
+const { fNum } = useNumbers();
+const { currency } = useUserSettings();
+</script>
+
+<template>
+  <BalCard noPad shadow="none">
+    <div class="p-4 w-full border-b dark:border-gray-900">
+      <h6>
+        {{ $t(`migratePool.${props.poolMigrationInfo.type}.poolStats.title`) }}
+      </h6>
+    </div>
+    <div class="-mt-2 p-4">
+      <div class="mb-3">
+        <div class="text-gray-500 dark:text-gray-400">
+          {{ $t('poolValue') }}
+        </div>
+        <div class="font-semibold">
+          {{ fNum(pool.totalLiquidity, currency) }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="text-gray-500 dark:text-gray-400">
+          {{ $t('volumeTime', ['24h']) }}
+        </div>
+        <div class="font-semibold">
+          {{ fNum(pool.dynamic.volume, currency) }}
+        </div>
+      </div>
+      <div>
+        <div class="text-gray-500 dark:text-gray-400">{{ $t('apr') }}</div>
+        <div class="flex items-center font-semibold">
+          {{ fNum(pool.dynamic.apr.total, 'percent') }}
+          <LiquidityAPRTooltip :pool="pool" />
+        </div>
+      </div>
+    </div>
+  </BalCard>
+</template>
