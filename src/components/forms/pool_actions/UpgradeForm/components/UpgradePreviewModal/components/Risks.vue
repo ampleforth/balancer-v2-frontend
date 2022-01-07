@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { PoolMigration } from '../../../types';
+import { PoolMigrationInfo } from '../../../types';
 /**
  * TYPES
  */
 type Props = {
-  poolMigration: PoolMigration;
+  poolMigrationInfo: PoolMigrationInfo;
 };
 
 /**
@@ -28,7 +28,7 @@ const { t } = useI18n();
   >
     <ul>
       <li
-        v-for="i18nLabel in props.poolMigration.riskI18nLabels"
+        v-for="i18nLabel in props.poolMigrationInfo.riskI18nLabels"
         :key="i18nLabel"
       >
         {{ t(i18nLabel) }}

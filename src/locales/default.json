@@ -163,12 +163,16 @@
             "riskWarnings": {
                 "title": "Some risks - you may lose funds in the pool if:",
                 "risks": {
-                    "lose-usd-peg": "Any of the tokens in this pool permanently loses it's target peg of 1 USD.",
-                    "aave-stable-exploit": "Problems arise on Aave. This is because, most of the stablecoins will be invested into Aave aTokens to earn you additional yield."
+                    "loseUSDPeg": "Any of the tokens in this pool permanently loses it's target peg of 1 USD.",
+                    "aaveStableExploit": "Problems arise on Aave. This is because, most of the stablecoins will be invested into Aave aTokens to earn you additional yield."
                 }
             }
         },
-        "migrateToBoostedPool": "Migrate to a boosted pool"
+        "migrateToBoostedPool": "Migrate to a boosted pool",
+        "errorLoadingMigration": {
+            "title": "Something went wrong",
+            "description": "An error occurred while trying to show pool migration."
+        }
     },
     "creating": "Creating",
     "createPool": "Create pool",

@@ -2,18 +2,18 @@ import { keyBy } from 'lodash';
 
 import { configService } from '@/services/config/config.service';
 
-import { PoolMigrationType, PoolMigration } from './types';
+import { PoolMigrationType, PoolMigrationInfo } from './types';
 
 const riskI18nLabelPrefix = 'migratePool.previewModal.riskWarnings.risks';
 
-export const POOL_MIGRATIONS: PoolMigration[] = [
+export const POOL_MIGRATIONS: PoolMigrationInfo[] = [
   {
     type: PoolMigrationType.AAVE_BOOSTED_POOL,
-    from: configService.network.pools.staBAL3,
-    to: configService.network.pools.bbAaveUSD,
+    fromPoolId: configService.network.pools.staBAL3,
+    toPoolId: configService.network.pools.bbAaveUSD,
     riskI18nLabels: [
-      `${riskI18nLabelPrefix}.lose-usd-peg`,
-      `${riskI18nLabelPrefix}.aave-stable-exploit`
+      `${riskI18nLabelPrefix}.loseUSDPeg`,
+      `${riskI18nLabelPrefix}.aaveStableExploit`
     ]
   }
 ];

@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import { FullPool } from '@/services/balancer/subgraph/types';
 import useWeb3 from '@/services/web3/useWeb3';
 import PoolCalculator from '@/services/pool/calculator/calculator.sevice';
+import { configService } from '@/services/config/config.service';
 
 import useTokens from '@/composables/useTokens';
 import useNumbers from '@/composables/useNumbers';
@@ -117,7 +118,7 @@ function fiatLabelFor(index: number, address: string): string {
 function navigateToPoolMigration(pool: FullPool) {
   router.push({
     name: 'migrate-pool',
-    params: { id: pool.id },
+    params: { from: pool.id, to: configService.network.pools.bbAaveUSD },
     query: {
       returnRoute: 'pool',
       returnParams: JSON.stringify({ id: pool.id })

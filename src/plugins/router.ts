@@ -49,7 +49,7 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'PoolTransferLayout' }
   },
   {
-    path: '/pool/migrate/:id',
+    path: '/pool/migrate/:from/:to',
     name: 'migrate-pool',
     component: MigratePoolPage,
     meta: { layout: 'FocusedLayout' }

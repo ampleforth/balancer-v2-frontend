@@ -18,12 +18,12 @@ import TradeSettingsPopover, {
 } from '@/components/popovers/TradeSettingsPopover.vue';
 import UpgradePreviewModal from '@/components/forms/pool_actions/UpgradeForm/components/UpgradePreviewModal/UpgradePreviewModal.vue';
 
-import { PoolMigration } from '@/components/forms/pool_actions/UpgradeForm/types';
+import { PoolMigrationInfo } from '@/components/forms/pool_actions/UpgradeForm/types';
 
 import { bnum } from '@/lib/utils';
 
 type Props = {
-  poolMigration: PoolMigration;
+  poolMigrationInfo: PoolMigrationInfo;
 };
 
 /**
@@ -46,8 +46,8 @@ const fromPoolTokenExpanded = ref(false);
 const toPoolTokenExpanded = ref(false);
 const showPreview = ref(false);
 
-const migrateFromPoolQuery = usePoolQuery(props.poolMigration.from);
-const migrateToPoolQuery = usePoolQuery(props.poolMigration.to);
+const migrateFromPoolQuery = usePoolQuery(props.poolMigrationInfo.fromPoolId);
+const migrateToPoolQuery = usePoolQuery(props.poolMigrationInfo.toPoolId);
 
 /**
  * COMPUTED
@@ -119,14 +119,16 @@ const migrateToPoolTokenInfo = computed(() =>
       <BalCard noPad shadow="none">
         <div class="p-4 w-full border-b dark:border-gray-900">
           <h6>
-            {{ t(`migratePool.${props.poolMigration.type}.whyUpgrade.title`) }}
+            {{
+              t(`migratePool.${props.poolMigrationInfo.type}.whyUpgrade.title`)
+            }}
           </h6>
         </div>
         <div class="-mt-2 p-4">
           <div class="text-gray-500 dark:text-gray-400">
             {{
               t(
-                `migratePool.${props.poolMigration.type}.whyUpgrade.description`
+                `migratePool.${props.poolMigrationInfo.type}.whyUpgrade.description`
               )
             }}
           </div>
@@ -151,7 +153,9 @@ const migrateToPoolTokenInfo = computed(() =>
           <div class="flex items-center justify-between">
             <h4>
               {{
-                t(`migratePool.${props.poolMigration.type}.upgradeToPool.title`)
+                t(
+                  `migratePool.${props.poolMigrationInfo.type}.upgradeToPool.title`
+                )
               }}
             </h4>
             <TradeSettingsPopover :context="TradeSettingsContext.invest" />
@@ -241,7 +245,9 @@ const migrateToPoolTokenInfo = computed(() =>
       <BalCard v-else noPad shadow="none">
         <div class="p-4 w-full border-b dark:border-gray-900">
           <h6>
-            {{ t(`migratePool.${props.poolMigration.type}.poolStats.title`) }}
+            {{
+              t(`migratePool.${props.poolMigrationInfo.type}.poolStats.title`)
+            }}
           </h6>
         </div>
         <div class="-mt-2 p-4">
@@ -277,7 +283,7 @@ const migrateToPoolTokenInfo = computed(() =>
       v-if="showPreview"
       :migrateFromPool="migrateFromPool"
       :migrateToPool="migrateToPool"
-      :poolMigration="props.poolMigration"
+      :poolMigrationInfo="props.poolMigrationInfo"
       @close="showPreview = false"
     />
   </teleport>

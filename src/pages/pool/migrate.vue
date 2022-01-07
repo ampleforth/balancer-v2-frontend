@@ -1,13 +1,35 @@
 <script setup lang="ts">
-import { PoolMigrationType } from '@/components/forms/pool_actions/UpgradeForm/types';
-import { POOL_MIGRATIONS_MAP } from '@/components/forms/pool_actions/UpgradeForm/constants';
+import { useRoute } from 'vue-router';
 
+import { POOL_MIGRATIONS } from '@/components/forms/pool_actions/UpgradeForm/constants';
 import UpgradeForm from '@/components/forms/pool_actions/UpgradeForm/UpgradeForm.vue';
 
-const selectedPoolMigration =
-  POOL_MIGRATIONS_MAP[PoolMigrationType.AAVE_BOOSTED_POOL];
+/**
+ * COMPOSABLES
+ */
+const route = useRoute();
+
+/**
+ * STATE
+ */
+const fromPoolId = route.params.from as string;
+const toPoolId = route.params.to as string;
+const poolMigrationInfo = POOL_MIGRATIONS.find(
+  poolMigrationInfo =>
+    poolMigrationInfo.fromPoolId === fromPoolId &&
+    poolMigrationInfo.toPoolId === toPoolId
+);
 </script>
 
 <template>
-  <UpgradeForm :poolMigration="selectedPoolMigration" />
+  <UpgradeForm
+    v-if="poolMigrationInfo"
+    :poolMigrationInfo="poolMigrationInfo"
+  />
+  <div v-else class="text-center">
+    <div class="font-semibold text-lg">
+      {{ $t('migratePool.errorLoadingMigration.title') }}
+    </div>
+    <div>{{ $t('migratePool.errorLoadingMigration.description') }}</div>
+  </div>
 </template>

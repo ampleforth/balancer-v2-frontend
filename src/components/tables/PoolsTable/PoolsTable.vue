@@ -24,6 +24,7 @@ import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
 import { ColumnDefinition } from '@/components/_global/BalTable/BalTable.vue';
 
 import TokenPills from './TokenPills/TokenPills.vue';
+import { configService } from '@/services/config/config.service';
 
 /**
  * TYPES
@@ -169,7 +170,7 @@ function handleRowClick(pool: DecoratedPoolWithShares) {
 function navigateToPoolMigration(pool: DecoratedPoolWithShares) {
   router.push({
     name: 'migrate-pool',
-    params: { id: pool.id },
+    params: { from: pool.id, to: configService.network.pools.bbAaveUSD },
     query: { returnRoute: 'home' }
   });
 }

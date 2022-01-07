@@ -2,9 +2,9 @@ export enum PoolMigrationType {
   AAVE_BOOSTED_POOL = 'aaveBoostedPool'
 }
 
-export type PoolMigration = {
+export type PoolMigrationInfo = {
   type: PoolMigrationType;
-  from: string;
-  to: string;
+  fromPoolId: string;
+  toPoolId: string;
   riskI18nLabels?: string[];
 };
