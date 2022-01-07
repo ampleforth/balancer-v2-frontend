@@ -260,7 +260,7 @@ function navigateToPoolMigration(pool: DecoratedPoolWithShares) {
             size="sm"
             @click.prevent="navigateToPoolMigration(pool)"
           >
-            {{ t('migrate') }}
+            {{ $t('migrate') }}
           </BalBtn>
         </div>
       </template>

@@ -16,9 +16,11 @@ import LiquidityAPRTooltip from '@/components/tooltips/LiquidityAPRTooltip.vue';
 import TradeSettingsPopover, {
   TradeSettingsContext
 } from '@/components/popovers/TradeSettingsPopover.vue';
-import UpgradePreviewModal from '@/components/forms/pool_actions/UpgradeForm/components/UpgradePreviewModal/UpgradePreviewModal.vue';
 
-import { PoolMigrationInfo } from '@/components/forms/pool_actions/UpgradeForm/types';
+import UpgradePreviewModal from './components/UpgradePreviewModal/UpgradePreviewModal.vue';
+import UpgradeExplainer from './components/UpgradeExplainer.vue';
+
+import { PoolMigrationInfo } from './types';
 
 import { bnum } from '@/lib/utils';
 
@@ -30,10 +32,6 @@ type Props = {
  * PROPS
  */
 const props = defineProps<Props>();
-
-/**
- * DATA
- */
 
 /**
  * COMPOSABLES
@@ -116,24 +114,7 @@ const migrateToPoolTokenInfo = computed(() =>
 <template>
   <Col3Layout offsetGutters>
     <template #gutterLeft>
-      <BalCard noPad shadow="none">
-        <div class="p-4 w-full border-b dark:border-gray-900">
-          <h6>
-            {{
-              t(`migratePool.${props.poolMigrationInfo.type}.whyUpgrade.title`)
-            }}
-          </h6>
-        </div>
-        <div class="-mt-2 p-4">
-          <div class="text-gray-500 dark:text-gray-400">
-            {{
-              t(
-                `migratePool.${props.poolMigrationInfo.type}.whyUpgrade.description`
-              )
-            }}
-          </div>
-        </div>
-      </BalCard>
+      <UpgradeExplainer :poolMigrationInfo="props.poolMigrationInfo" />
     </template>
 
     <BalLoadingBlock
@@ -163,7 +144,7 @@ const migrateToPoolTokenInfo = computed(() =>
         </div>
       </template>
       <div class="mb-6">
-        <div class="text-gray-500">{{ t('yourBalanceInPool') }}</div>
+        <div class="text-gray-500">{{ $t('yourBalanceInPool') }}</div>
         <div class="font-semibold">{{ fromPoolFiatTotal }}</div>
       </div>
       <div class="rounded border dark:border-gray-900 p-3 mb-6">
@@ -236,7 +217,7 @@ const migrateToPoolTokenInfo = computed(() =>
         </BalBreakdown>
       </div>
       <BalBtn color="gradient" block @click="showPreview = true">
-        {{ t('previewUpgrade') }}
+        {{ $t('previewUpgrade') }}
       </BalBtn>
     </BalCard>
 
@@ -253,7 +234,7 @@ const migrateToPoolTokenInfo = computed(() =>
         <div class="-mt-2 p-4">
           <div class="mb-3">
             <div class="text-gray-500 dark:text-gray-400">
-              {{ t('poolValue') }}
+              {{ $t('poolValue') }}
             </div>
             <div class="font-semibold">
               {{ fNum(migrateToPool.totalLiquidity, currency) }}
@@ -261,14 +242,14 @@ const migrateToPoolTokenInfo = computed(() =>
           </div>
           <div class="mb-3">
             <div class="text-gray-500 dark:text-gray-400">
-              {{ t('volumeTime', ['24h']) }}
+              {{ $t('volumeTime', ['24h']) }}
             </div>
             <div class="font-semibold">
               {{ fNum(migrateToPool.dynamic.volume, currency) }}
             </div>
           </div>
           <div>
-            <div class="text-gray-500 dark:text-gray-400">{{ t('apr') }}</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ $t('apr') }}</div>
             <div class="flex items-center font-semibold">
               {{ fNum(migrateToPool.dynamic.apr.total, 'percent') }}
               <LiquidityAPRTooltip :pool="migrateToPool" />

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
 import { PoolMigrationInfo } from '../../../types';
 /**
  * TYPES
@@ -12,11 +11,6 @@ type Props = {
  * PROPS
  */
 const props = defineProps<Props>();
-
-/**
- * COMPOSABLES
- */
-const { t } = useI18n();
 </script>
 
 <template>
@@ -31,7 +25,7 @@ const { t } = useI18n();
         v-for="i18nLabel in props.poolMigrationInfo.riskI18nLabels"
         :key="i18nLabel"
       >
-        {{ t(i18nLabel) }}
+        {{ $t(i18nLabel) }}
       </li>
     </ul>
   </BalAlert>
